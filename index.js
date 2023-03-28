@@ -262,43 +262,53 @@ app.post('/users/:id', (req,res)=>{
     }
 });
 
-app.put('/users/:id', (req, res)=>{
-    const {id}=req.params;
-    const userUpdate=req.body;
+// Update the name for a user
+app.put('/users/:id', (req, res) => {
+    const id = req.params.id;
+    const newName = req.body.name;
 
-    let user=users.find(user=>user.id === id);
+    // Find the user by ID
+    const user = users.find(user => user.id === id);
 
-    if(user){
-        user.name=userUpdate.name;
-        res.status(201).json(user);
-    }else{
-        res.status(400).send('cannot update');
-    }
-});
-
-
-//DELTE
-app.delete('/users/:id/:movieTitle', (req,res)=>{
-    const {id, movieTitle} =req.params;
-
-    let user = users.find(user=>user.id ===id);
-
-    if(user){
-        user.movieList=user.movieList.filter(title=>title !== movieTitle);
-        res.status(201).send(`${movieTitle} has been removed from your list`);
-    }else{
-        res.status(400).send('User not found');
-    }
-});
-
-app.delete('/users/:id', (req, res) => {
-    const {id} = req.params;
-
-    let user = users.find(user => user.id === id );
-
+    // If user is found, update the name
     if (user) {
-        users = users.filter(user => user.id !== req.params.id);
-        res.status(201).send('User account ' + req.params.id + ' was deleted.');
+        user.name = newName;
+        res.status(200).send('User name updated successfully');
+    } else {
+        res.status(404).send('User not found');
+    }
+});
+
+//Delete movie from a user
+app.delete('/users/:id/:movieTitle', (req, res) => {
+    const { id, movieTitle } = req.params;
+    const user = users.find(user => user.id === id);
+
+    if (!user) {
+        return res.status(404).send('User not found');
+    }
+
+    const index = user.movieList.findIndex(movie => movie.title.toLowerCase().includes(movieTitle.toLowerCase()));
+
+    if (index === -1) {
+        return res.status(404).send('Movie not found');
+    }
+
+    user.movieList.splice(index, 1);
+
+    res.send('Movie deleted successfully');
+});
+
+//Delete a user
+app.delete('/users/:id', (req, res) => {
+    const id = req.params.id;
+    const index = users.findIndex(user => user.id === id);
+
+    if (index !== -1) {
+        users.splice(index, 1);
+        res.send(`User with id ${id} has been deleted`);
+    } else {
+        res.status(404).send('User not found');
     }
 });
 
