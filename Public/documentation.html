@@ -1,121 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MovieAPI App</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <title>API Documentation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
-<div>
-    <h1>Movie API</h1>
-    <h2>Objective</h2>
-    <p>
-        The web application will provide users with access to information about different
-        movies, directors, and genres. Users will be able to sign up, update their
-        personal information, and create a list of their favorite movies.</p>
-
-    <h2>Features</h2>
-    <ul>
-        <li>Return a list of ALL movies to the user</li>
-        <li>Return data (description, genre, director, image URL, whether it's featured or not) about a single movie by title to the user</li>
-        <li>Return data about a genre (description) by name/title</li>
-        <li>Return data about a director (bio, birth year, death year) by name</li>
-        <li>Allow new users to register</li>
-        <li>Allow users to update their user info</li>
-        <li>Allow users to add a movie to their list of favorites</li>
-        <li>Allow users to remove a movie from their list of favorites</li>
-        <li>Allow existing users to deregister.</li>
-    </ul>
-</div>
-
-<h2>API Endpoint Documentation</h2>
-
-<table class="table">
+<h1>API Documentation</h1>
+<p>Below are the available endpoints for this API, along with their HTTP methods and descriptions.</p>
+<table>
     <thead>
     <tr>
+        <th>Endpoint</th>
+        <th>Method</th>
         <th>Description</th>
-        <th>URL endpoint</th>
-        <th>HTTP Method</th>
-        <th>Query Parameters</th>
     </tr>
     </thead>
-
     <tbody>
     <tr>
-        <td>Returns a list of all movies</td>
-        <td>/movies</td>
+        <td>/users</td>
         <td>GET</td>
-        <td>-</td>
+        <td>Retrieve a list of all users.</td>
     </tr>
-
     <tr>
-        <td>Returns data about single movie by title</td>
-        <td>/movies/:Title</td>
+        <td>/users/:id</td>
         <td>GET</td>
-        <td>:Title</td>
+        <td>Retrieve a specific user by their ID.</td>
     </tr>
-
     <tr>
-        <td>Returns data about a genre by title</td>
-        <td>/movies/genre/:Name</td>
-        <td>GET</td>
-        <td>:genreName</td>
-    </tr>
-
-    <tr>
-        <td>Returns data about a director by name</td>
-        <td>/movies/director/:Name</td>
-        <td>GET</td>
-        <td>:directorName</td>
-    </tr>
-
-    <tr>
-        <td>Allows users to add a movie to the database</td>
-        <td>/movies</td>
-        <td>POST</td>
-        <td>-</td>
-    </tr>
-
-    <tr>
-        <td>Allows new users to register</td>
         <td>/users</td>
         <td>POST</td>
-        <td>-</td>
+        <td>Create a new user.</td>
     </tr>
-
-
     <tr>
-        <td>Allows users to update their user info</td>
-        <td>/users/:Username</td>
+        <td>/users/:id</td>
         <td>PUT</td>
-        <td>:Username</td>
+        <td>Update an existing user by their ID.</td>
     </tr>
-
     <tr>
-        <td>Allows users to add a movie to their favorites</td>
-        <td>/users/:Username/movies/:MovieID</td>
-        <td>POST</td>
-        <td>:Username
-            :MovieID
-        </td>
-    </tr>
-
-    <tr>
-        <td>Allows users to remove a movie from their favorites</td>
-        <td>/users/:Username/movies/:MovieID</td>
+        <td>/users/:id</td>
         <td>DELETE</td>
-        <td>:Username
-            :MovieID
-        </td>
-    </tr>
-
-    <tr>
-        <td>Allows existing users to deregister</td>
-        <td>/users/:Username</td>
-        <td>DELETE</td>
-        <td>:Username</td>
+        <td>Delete a user by their ID.</td>
     </tr>
     </tbody>
 </table>
