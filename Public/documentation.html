@@ -49,6 +49,7 @@
     <tr>
         <th>Endpoint</th>
         <th>Method</th>
+        <th>Body</th>
         <th>Description</th>
     </tr>
     </thead>
@@ -56,26 +57,90 @@
     <tr>
         <td>/users</td>
         <td>GET</td>
+        <td>N/A</td>
         <td>Retrieve a list of all users.</td>
     </tr>
     <tr>
-        <td>/users/:id</td>
+        <td>/movies</td>
         <td>GET</td>
-        <td>Retrieve a specific user by their ID.</td>
+        <td>N/A</td>
+        <td>Retrieve a list of movies.</td>
+    </tr>
+    <tr>
+        <td>/movies/:Title</td>
+        <td>GET</td>
+        <td>N/A</td>
+        <td>Retrieve a specific movie by their Title.</td>
+    </tr>
+    <tr>
+        <td>/genres/:Genre</td>
+        <td>GET</td>
+        <td>N/A</td>
+        <td>Retrieve a description of a specific genre by their name.</td>
+    </tr>
+    <tr>
+        <td>/movies/genres/:Genre</td>
+        <td>GET</td>
+        <td>N/A</td>
+        <td>Retrieve a list of movies by their genre.</td>
+    </tr>
+    <tr>
+        <td>/directors/:Name</td>
+        <td>GET</td>
+        <td>N/A</td>
+        <td>Retrieve an information of a director by their name.</td>
+    </tr>
+    <tr>
+        <td>movies/directors/:Name</td>
+        <td>GET</td>
+        <td>N/A</td>
+        <td>Retrieve a list of movies by their director.</td>
+    </tr>
+    <tr>
+        <td>/users/:Username</td>
+        <td>GET</td>
+        <td>N/A</td>
+        <td>Retrieve a specific user by their Username.</td>
     </tr>
     <tr>
         <td>/users</td>
         <td>POST</td>
+        <td>{
+            "username": "user5",
+            "password": "123qwe",
+            "email": "user5@test.com",
+            "birthday": "1999-06-23"
+            }</td>
         <td>Create a new user.</td>
     </tr>
     <tr>
         <td>/users/:id</td>
         <td>PUT</td>
+        <td>{
+            "username": "Jose"
+            }</td>
         <td>Update an existing user by their ID.</td>
+    </tr>
+    <tr>
+        <td>/users/:id/movies</td>
+        <td>PUT</td>
+        <td>{
+            "movieID": "642b7d00df59c3bff5d4a750"
+            }</td>
+        <td>Update the FavoriteMovies list for a user by their ID.</td>
+    </tr>
+    <tr>
+        <td>/users/:id/movies</td>
+        <td>DELETE</td>
+        <td>{
+            "movieID": "642b7d00df59c3bff5d4a750"
+            }</td>
+        <td>Deletes a movie by their id from the user's FavoriteMovies list.</td>
     </tr>
     <tr>
         <td>/users/:id</td>
         <td>DELETE</td>
+        <td>N/A</td>
         <td>Delete a user by their ID.</td>
     </tr>
     </tbody>
