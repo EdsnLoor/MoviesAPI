@@ -4,6 +4,11 @@ const express = require('express'),
         path = require('path'),
         uuid = require('uuid'),
         bodyParser = require('body-parser');
+const mongoose = require ('mongoose');
+const Models = require ('./models');
+
+const Movies = Models.Movie;
+const Users = Models.User;
 
 const app = express();
 
@@ -12,164 +17,11 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Genres, Users and movies defined
-let genres = [
-    {
-        name: 'Action',
-        description:'Action film is a film genre in which the protagonist is thrust into a series of events that typically involve violence and physical feats.'
-    },
-    {
-        name: 'Horror',
-        description:'Horror is a film genre that seeks to elicit fear or disgust in its audience for entertainment purposes. '
-    },
-    {
-        name: 'Drama',
-        description:'In film and television, drama is a category or genre of narrative fiction intended to be more serious than humorous in tone'
-    },
-    {
-        name: 'Thriller',
-        description:'Thriller is a genre of fiction with numerous, often overlapping, subgenres, including crime, horror and detective fiction.'
-    },
-    {
-        name: 'Comedy',
-        description:'A comedy film is a category of film which emphasizes humor.'
-    },
-    {
-        name: 'Fantasy',
-        description: 'Fantasy films are films that belong to the fantasy genre with fantastic themes, usually magic, supernatural events, mythology, folklore, or exotic fantasy worlds.'
-    }
-]
+mongoose.connect('mongodb://localhost:27017/moviesAPI', { useNewUrlParser: true, useUnifiedTopology: true });
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-let movies = [
-    {
-        title: 'Donnie Darko',
-        director: {
-            name: 'Richard Kelly',
-            bio: 'James Richard Kelly is an American filmmaker and screenwriter, who initially gained recognition for writing and directing the cult classic Donnie Darko in 2001.',
-            dateOfBirth: '1975',
-            dateOfDead: 'present'
-        },
-        genre: genres[3],
-        imageURL:'https://upload.wikimedia.org/wikipedia/en/d/db/Donnie_Darko_poster.jpg'
-    },
-    {
-        title: 'A Clockwork Orange',
-        director: {
-            name: 'Stanley Kubrick',
-            bio: 'Stanley Kubrick was an American film director, producer and screenwriter. Widely considered one of the greatest filmmakers of all time.',
-            dateOfBirth: '1928',
-            dateOfDead: '1999'
-        },
-        genre: genres[3],
-        imageURL: 'https://upload.wikimedia.org/wikipedia/en/7/73/A_Clockwork_Orange_%281971%29.png'
-    },
-    {
-        title: 'The Shining',
-        director: {
-            name: 'Stanley Kubrick',
-            bio: 'Stanley Kubrick was an American film director, producer and screenwriter. Widely considered one of the greatest filmmakers of all time.',
-            dateOfBirth: '1928',
-            dateOfDead: '1999'
-        },
-        genre: genres[1],
-        imageURL: 'https://upload.wikimedia.org/wikipedia/en/1/1d/The_Shining_%281980%29_U.K._release_poster_-_The_tide_of_terror_that_swept_America_IS_HERE.jpg'
-    },
-    {
-        title: 'The Lord of the Rings: The Return of the King',
-        director: {
-            name: 'Peter Jackson',
-            bio: 'Sir Peter Robert Jackson ONZ KNZM is a New Zealand film director, screenwriter and producer. He is best known as the director, writer and producer of the Lord of the Rings trilogy and the Hobbit trilogy.',
-            dateOfBirth: '1961',
-            dateOfDead: 'present'
-        },
-        genre: genres[5],
-        imageURL: 'https://upload.wikimedia.org/wikipedia/en/b/be/The_Lord_of_the_Rings_-_The_Return_of_the_King_%282003%29.jpg'
-    },
-    {
-        title: 'The Dark Knight',
-        director: {
-            name: 'Christopher Nolan',
-            bio: 'Christopher Edward Nolan CBE is a British-American filmmaker. Known for his Hollywood blockbusters with complex storytelling.',
-            dateOfBirth: '1970',
-            dateOfDead: 'present'
-        },
-        genre: genres[0],
-        imageURL: 'https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg'
-    },
-    {
-        title: 'Fight Club',
-        director: {
-            name: 'David Fincher',
-            bio: 'David Andrew Leo Fincher is an American film director. His films, mostly psychological thrillers, have received 40 nominations at the Academy Awards, including three for him as Best Director.',
-            dateOfBirth: '1962',
-            dateOfDead: 'present'
-        },
-        genre: genres[3],
-        imageURL: 'https://upload.wikimedia.org/wikipedia/en/f/fc/Fight_Club_poster.jpg'
-    },
-    {
-        title: 'Pulp Fiction',
-        director: {
-            name: 'Quentin Tarantino',
-            bio: 'Quentin Jerome Tarantino is an American film director, writer, producer, and actor. His films are characterized by stylized violence, extended dialogue including the pervasive use of profanity and references to popular culture.',
-            dateOfBirth: '1963',
-            dateOfDead: 'present'
-        },
-        genre: genres[0],
-        imageURL: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Pulp_Fiction_%281994%29_poster.jpg'
-    },
-    {
-        title: 'Inglourious Basterds',
-        director: {
-            name: 'Quentin Tarantino',
-            bio: 'Quentin Jerome Tarantino is an American film director, writer, producer, and actor. His films are characterized by stylized violence, extended dialogue including the pervasive use of profanity and references to popular culture.',
-            dateOfBirth: '1963',
-            dateOfDead: 'present'
-        },
-        genre: genres[3],
-        imageURL: 'https://m.media-amazon.com/images/M/MV5BOTJiNDEzOWYtMTVjOC00ZjlmLWE0NGMtZmE1OWVmZDQ2OWJhXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_FMjpg_UX1000_.jpg'
-    },
-    {
-        title: 'The Lord of the Rings: The Fellowship of the Ring',
-        director: {
-            name: 'Peter Jackson',
-            bio: 'Sir Peter Robert Jackson ONZ KNZM is a New Zealand film director, screenwriter and producer. He is best known as the director, writer and producer of the Lord of the Rings trilogy and the Hobbit trilogy.',
-            dateOfBirth: '1961',
-            dateOfDead: 'present'
-        },
-        genre: genres[5],
-        imageURL: 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg'
-    },
-    {
-        title: 'Gladiator',
-        director: {
-            name: 'Ridley Scott',
-            bio: 'Sir Ridley Scott is an English film director and producer. Best known for directing films in the science fiction and historical drama genres.',
-            dateOfBirth: '1937',
-            dateOfDead: 'present'
-        },
-        genre: genres[2],
-        imageURL: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/41jDD6TfonL._AC_UF894,1000_QL80_.jpg'
-    },
-];
-
-let users = [
-    {
-        id: '1',
-        name: 'user1',
-        movieList: [movies[0],movies[1]]
-    },
-    {
-        id: '2',
-        name: 'user2',
-        movieList: []
-    },
-    {
-        id: '3',
-        name: 'user3',
-        movieList: []
-    }
-]
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
 
 // business logic
 app.get('/', (req, res) => {
@@ -183,134 +35,230 @@ app.get('/documentation', (req, res) => {
 
 // Get all users and movies
 app.get('/movies', (req, res) => {
-    res.status(200).json(movies);
+    Movies.find()
+        .then((movies) => {
+            res.status(200).json(movies);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 app.get('/users', (req, res) => {
-    res.status(200).json(users);
+    Users.find()
+        .then((users) => {
+            res.status(201).json(users);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
-// get a movie by title
-app.get('/movies/:title', (req, res) => {
-    const searchTitle = req.params.title.toLowerCase();
-    const movie = movies.find(movie => movie.title.toLowerCase().includes(searchTitle));
-    if (movie) {
-        res.send(movie);
-    } else {
-        res.status(404).send('Movie not found');
-    }
+// Get a user by username
+app.get('/users/:Username', (req, res) => {
+    Users.findOne({ username: req.params.Username })
+        .then((user) => {
+            if (!user) {
+                res.status(400).send(req.params.Username + ' was not found');
+            } else {
+                res.json(user);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
+
+// Get a movie by title
+app.get('/movies/:Title', (req, res) => {
+    Movies.findOne({ title: req.params.Title })
+        .then((movies) => {
+            if (!movies) {
+                res.status(400).send(req.params.Title + ' was not found');
+            } else {
+                res.status(200).json(movies);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 // get genre description
-app.get('/genres/:genreName', (req, res) => {
-    const genre = genres.find(genre => genre.name.toLowerCase() === req.params.genreName.toLowerCase());
-    if (genre) {
-        res.send(genre);
-    } else {
-        res.status(404).send('Genre not found');
-    }
+app.get('/genres/:Genre', (req, res) => {
+    Movies.find({ 'genre.name' : req.params.Genre })
+        .then((movie) => {
+            if (!movie) {
+                res.status(400).send(req.params.Genre + ' was not found');
+            } else {
+                res.json(movie[0].genre);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
-// Get director's information
-app.get('/director/:name', (req, res) => {
-    const searchName = req.params.name.toLowerCase();
-    const movie = movies.find(movie => movie.director.name.toLowerCase().includes(searchName));
-
-    if (!movie) {
-        return res.status(404).send('Director not found');
-    }
-
-    res.send(movie.director);
+// get all movies by genre
+app.get('/movies/genres/:Genre', (req, res) => {
+    Movies.find({ 'genre.name' : req.params.Genre })
+        .then((movie) => {
+            if (!movie) {
+                res.status(400).send(req.params.Genre + ' was not found');
+            } else {
+                res.json(movie);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
-// create a user
-app.post('/users', (req,res) => {
-    const newUser = req.body;
-    let validateUser = users.find(user=>user.name === newUser.name);
-    if (newUser.name) {
-        if (!validateUser){
-            newUser.id = uuid.v4();
-            users.push(newUser);
-            res.status(201).json(newUser)
+// get director's information
+app.get('/directors/:Name', (req, res) => {
+    Movies.find({ 'director.name' : req.params.Name })
+        .then((movie) => {
+            if (!movie) {
+                res.status(400).send(req.params.Name + ' was not found');
+            } else {
+                res.json(movie[0].director);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
+
+// get all movies by director
+app.get('/movies/directors/:Name', (req, res) => {
+    Movies.find({ 'director.name' : req.params.Name })
+        .then((movie) => {
+            if (!movie) {
+                res.status(400).send(req.params.Name + ' was not found');
+            } else {
+                res.json(movie);
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
+
+// add new user
+app.post('/users', (req, res) => {
+    Users.findOne({ username: req.body.username })
+        .then((user) => {
+            if (user) {
+                return res.status(400).send(req.body.username + ' already exists');
+            } else {
+                Users
+                    .create({
+                        username: req.body.username,
+                        password: req.body.password,
+                        email: req.body.email,
+                        birthday: req.body.birthday
+                    })
+                    .then((user) =>{res.status(201).json(user) })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).send('Error: ' + error);
+                    })
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error);
+        });
+});
+
+// update user's information
+app.put('/users/:id', async (req, res) => {
+    try {
+        const user = await Users.findOne({ _id: req.params.id });
+        if (!user) {
+            return res.status(404).send('User not found');
         } else {
-            res.status(400).send('User name already exists')
+            const updatedUser = await Users.findOneAndUpdate({ _id: req.params.id }, { $set: {
+                    username: req.body.username,
+                    password: req.body.password,
+                    email: req.body.email,
+                    birthday: req.body.birthday
+                }}, { new: true });
+
+            res.json(updatedUser);
         }
-    }
-    else {
-        res.status(400).send('Name parameter is mandatory')
+    } catch(err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
     }
 });
 
-// add a movie to a user
-app.post('/users/:id', (req,res)=>{
-    const {id} = req.params;
-    const newMovie = req.body
-    let addMovie = movies.find(movies=>movies.title === newMovie.title);
-    let validateUser = users.find(user=>user.id === id);
-
-    if(validateUser){
-        if (addMovie){
-            validateUser.movieList.push(addMovie);
-            res.status(201).send(`${newMovie.title} has been added to ${validateUser.name}'s list`)
-            console.log(newMovie);
+// Add a movie to a user
+app.put('/users/:id/movies', async (req, res) => {
+    try {
+        const user = await Users.findOne({ _id: req.params.id });
+        const movie = await Movies.findOne({ _id: req.body.movieID });
+        if (!user) {
+            return res.status(404).send('User not found');
+        } else if (!movie){
+            return res.status(404).send('Movie not found');
+        }else {
+            const updatedUser = await Users.findOneAndUpdate({ _id: req.params.id }, { $push: {
+                    FavoriteMovies: req.body.movieID
+                }}, { new: true });
+            res.json(updatedUser);
         }
-        else {
-            res.status(400).send('Movie not found');
+    } catch(err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    }
+});
+
+// delete a movie for a user's FavoritesMovies list
+app.delete('/users/:id/movies', async (req, res) => {
+    try {
+        const user = await Users.findOne({ _id: req.params.id });
+        const movie = await Movies.findOne({ _id: req.body.movieID });
+        if (!user) {
+            return res.status(404).send('User not found');
+        } else if (!movie){
+            return res.status(404).send('Movie not found');
+        }else {
+            const updatedUser = await Users.findOneAndUpdate({ _id: req.params.id }, { $pull: {
+                    FavoriteMovies: req.body.movieID
+                }}, { new: true });
+            res.json(updatedUser);
         }
-    }else{
-        res.status(400).send('User not found');
+    } catch(err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
     }
 });
 
-// Update the name for a user
-app.put('/users/:id', (req, res) => {
-    const id = req.params.id;
-    const newName = req.body.name;
-
-    // Find the user by ID
-    const user = users.find(user => user.id === id);
-
-    // If user is found, update the name
-    if (user) {
-        user.name = newName;
-        res.status(200).send('User name updated successfully');
-    } else {
-        res.status(404).send('User not found');
-    }
-});
-
-//Delete movie from a user
-app.delete('/users/:id/:movieTitle', (req, res) => {
-    const { id, movieTitle } = req.params;
-    const user = users.find(user => user.id === id);
-
-    if (!user) {
-        return res.status(404).send('User not found');
-    }
-
-    const index = user.movieList.findIndex(movie => movie.title.toLowerCase().includes(movieTitle.toLowerCase()));
-
-    if (index === -1) {
-        return res.status(404).send('Movie not found');
-    }
-
-    user.movieList.splice(index, 1);
-
-    res.send('Movie deleted successfully');
-});
-
-//Delete a user
+// delete user by id
 app.delete('/users/:id', (req, res) => {
-    const id = req.params.id;
-    const index = users.findIndex(user => user.id === id);
-
-    if (index !== -1) {
-        users.splice(index, 1);
-        res.send(`User with id ${id} has been deleted`);
-    } else {
-        res.status(404).send('User not found');
-    }
+    Users.findOneAndRemove({ _id: req.params.id })
+        .then((user) => {
+            if (!user) {
+                res.status(400).send(user.username + ' was not found');
+            } else {
+                res.status(200).send(user.username + ' was deleted.');
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
