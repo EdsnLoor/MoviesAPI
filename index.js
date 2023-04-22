@@ -12,12 +12,16 @@ const Users = Models.User;
 
 const app = express();
 
+// const cors = require('cors');
+// app.use(cors());
+
 app.use(morgan('common'));
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/moviesAPI', { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost:27017/moviesAPI', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://user_node_edison:VrCNxqhIK3oXNat8@cluster0.vzvfh.mongodb.net/moviesAPI?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -160,6 +164,7 @@ app.get('/movies/directors/:Name', passport.authenticate("jwt", { session: false
 
 // add new user
 app.post('/users', passport.authenticate("jwt", { session: false }),(req, res) => {
+    // let hashedPassword = Users.hashPassword(req.body.password);
     Users.findOne({ username: req.body.username })
         .then((user) => {
             if (user) {
