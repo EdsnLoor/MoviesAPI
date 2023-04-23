@@ -4,6 +4,7 @@ const express = require('express'),
         path = require('path'),
         uuid = require('uuid'),
         bodyParser = require('body-parser');
+require('dotenv').config()
 const mongoose = require ('mongoose');
 const Models = require ('./models');
 
@@ -21,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //mongoose.connect('mongodb://localhost:27017/moviesAPI', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect('mongodb+srv://user_node_edison:VrCNxqhIK3oXNat8@cluster0.vzvfh.mongodb.net/moviesAPI?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_CNN, { useNewUrlParser: true, useUnifiedTopology: true });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
