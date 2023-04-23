@@ -292,7 +292,7 @@ app.use((err, req, res, next) => {
     res.send('Error');
 });
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 app.listen(port, '0.0.0.0',() => {
     console.log('Listening on Port ' + port);
 });
