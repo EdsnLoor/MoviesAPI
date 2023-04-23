@@ -5,6 +5,7 @@ const express = require('express'),
         uuid = require('uuid'),
         bodyParser = require('body-parser');
 require('dotenv').config()
+const { check, validationResult } = require('express-validator');
 const mongoose = require ('mongoose');
 const Models = require ('./models');
 
@@ -13,8 +14,8 @@ const Users = Models.User;
 
 const app = express();
 
-// const cors = require('cors');
-// app.use(cors());
+const cors = require('cors');
+app.use(cors());
 
 app.use(morgan('common'));
 app.use(express.static('public'));
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let auth = require("./auth")(app);
 const passport = require("passport");
 require("./passport");
+const {User} = require("./models");
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
 
@@ -164,8 +166,20 @@ app.get('/movies/directors/:Name', passport.authenticate("jwt", { session: false
 });
 
 // add new user
-app.post('/users', passport.authenticate("jwt", { session: false }),(req, res) => {
-    // let hashedPassword = Users.hashPassword(req.body.password);
+app.post('/users', passport.authenticate("jwt", { session: false }),
+    [
+        check('username', 'Username has to be at least 5 characters long').isLength({min: 5}),
+        check('username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+        check('password', 'Password is required').not().isEmpty(),
+        check('email', 'Email does not appear to be valid').isEmail()
+    ],
+    (req, res) => {
+        let errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
+    let hashedPassword = Users.hashPassword(req.body.password);
     Users.findOne({ username: req.body.username })
         .then((user) => {
             if (user) {
@@ -174,7 +188,7 @@ app.post('/users', passport.authenticate("jwt", { session: false }),(req, res) =
                 Users
                     .create({
                         username: req.body.username,
-                        password: req.body.password,
+                        password: hashedPassword,
                         email: req.body.email,
                         birthday: req.body.birthday
                     })
